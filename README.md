@@ -27,7 +27,7 @@ O objetivo é criar um sistema funcional de estoque com cadastro de produtos, fo
 ## 🛠️ **Tecnologias Utilizadas**
 
 ### Backend
-- Java 17
+- Java 19
 - Spring Boot 3.2.x
 - Spring Web
 - Spring Data JPA
