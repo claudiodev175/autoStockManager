@@ -1,14 +1,74 @@
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input type="email" class="form-control" id="email"
-        placeholder="Email">
-</div>
-<div class="mb-3">
-    <label for="senha" class="form-label">Senha</label>
-    <input type="password" id="senha" class="form-control"
-        aria-describedby="passwordHelpBlock">
-    <div id="passwordHelpBlock" class="form-text">
-        Your password must be 8-20 characters long, contain letters and numbers,
-        and must not contain spaces, special characters, or emoji.
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center wallpaper-container">
+  <div class="wallpaper-overlay"></div>
+  
+    <div class="card shadow-lg login-card" style="max-width: 400px; width: 100%;">
+    <div class="card-body p-1 p-sm-5">
+      <!-- Título -->
+      <div class="text-center mb-1">
+        <img 
+          src="/assets/logo.png" 
+          alt="Logo Login" 
+          class="img-fluid" 
+          style="max-height: 150px; width: auto;">
+      </div>
+      
+      <!-- Formulário -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Campo Email -->
+        <div class="mb-2">
+          <label for="email" class="form-label fw-bold">Email</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email"
+            formControlName="email"
+            [class.is-invalid]="submitted && f['email'].errors"
+            placeholder="Digite seu email">
+          
+          <!-- Mensagens de erro -->
+          <div class="invalid-feedback" *ngIf="submitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']">Email é obrigatório</span>
+            <span *ngIf="f['email'].errors['email']">Digite um email válido</span>
+          </div>
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="mb-3">
+          <label for="password" class="form-label fw-bold">Senha</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password"
+            formControlName="password"
+            [class.is-invalid]="submitted && f['password'].errors"
+            placeholder="Digite sua senha">
+          
+          <!-- Mensagens de erro -->
+          <div class="invalid-feedback" *ngIf="submitted && f['password'].errors">
+            <span *ngIf="f['password'].errors['required']">Senha é obrigatória</span>
+            <span *ngIf="f['password'].errors['minlength']">Mínimo 8 caracteres</span>
+            <span *ngIf="f['password'].errors['maxlength']">Máximo 20 caracteres</span>
+            <span *ngIf="f['password'].errors['pattern']">
+            </span>
+          </div>
+
+          
+        </div>
+
+        <!-- Botão de Login com estado de loading Bootstrap -->
+        <button 
+          type="submit" 
+          class="btn btn-primary w-100 mb-3"
+          [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+
+        <!-- Links adicionais -->
+        <div class="d-flex justify-content-center gap-3">
+          <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
