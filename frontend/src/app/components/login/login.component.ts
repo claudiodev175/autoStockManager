@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -32,6 +33,10 @@ export class LoginComponent implements OnInit {
 
   get f() { return this.loginForm.controls; }
 
+   goToHome(): void {
+    this.router.navigate(['/home']);
+  }
+
   onSubmit() {
     this.submitted = true;
 
@@ -47,6 +52,7 @@ export class LoginComponent implements OnInit {
       this.loading = false;
       // Aqui você redireciona ou mostra mensagem de sucesso
     }, 2000);
+     this.goToHome();
   }
 
 }
