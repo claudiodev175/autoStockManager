@@ -36,4 +36,25 @@ public class ProdutoService {
             return produtoRepository.save(produto);
         }).orElse(null);
     }
+
+      public Produto entradaEstoque(Long id, int quantidade) {
+        Produto produto = obterProdutoPorId(id);
+
+        produto.setQuantidade(produto.getQuantidade() + quantidade);
+
+        return produtoRepository.save(produto);
+    }
+
+    public Produto saidaEstoque(Long id, int quantidade) {
+        Produto produto = obterProdutoPorId(id);
+
+        if (produto.getQuantidade() < quantidade) {
+            throw new RuntimeException("Estoque insuficiente");
+        }
+
+        produto.setQuantidade(produto.getQuantidade() - quantidade);
+
+        return produtoRepository.save(produto);
+    }
+
 }

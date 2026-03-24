@@ -1,5 +1,7 @@
 package br.com.autoStock.api.autoStock_api.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,5 +51,15 @@ public class ProdutoController {
     public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
         produtoService.deletarProduto(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/entrada")
+    public Produto entrada(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
+        return produtoService.entradaEstoque(id, body.get("quantidade"));
+    }
+
+    @PostMapping("/{id}/saida")
+    public Produto saida(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
+        return produtoService.saidaEstoque(id, body.get("quantidade"));
     }
 }
