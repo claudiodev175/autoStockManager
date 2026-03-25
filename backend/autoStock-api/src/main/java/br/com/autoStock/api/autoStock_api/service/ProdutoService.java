@@ -1,16 +1,24 @@
 package br.com.autoStock.api.autoStock_api.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.autoStock.api.autoStock_api.model.Produto;
 import br.com.autoStock.api.autoStock_api.repository.ProdutoRepository;
+import br.com.autoStock.api.autoStock_api.model.Movimentacao;
+import br.com.autoStock.api.autoStock_api.repository.MovimentacaoRepository;
+import br.com.autoStock.api.autoStock_api.enums.TipoMovimentacao;
 
 @Service
 public class ProdutoService {
-    
+
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private MovimentacaoRepository movimentacaoRepository;
 
     public Produto salvarProduto(Produto produto) {
         return produtoRepository.save(produto);
@@ -41,8 +49,11 @@ public class ProdutoService {
         Produto produto = obterProdutoPorId(id);
 
         produto.setQuantidade(produto.getQuantidade() + quantidade);
+        Produto atualizado = produtoRepository.save(produto);
 
-        return produtoRepository.save(produto);
+        salvarMovimentacao(produto, TipoMovimentacao.ENTRADA, quantidade);
+
+        return atualizado;
     }
 
     public Produto saidaEstoque(Long id, int quantidade) {
@@ -53,8 +64,22 @@ public class ProdutoService {
         }
 
         produto.setQuantidade(produto.getQuantidade() - quantidade);
+        Produto atualizado = produtoRepository.save(produto);
 
-        return produtoRepository.save(produto);
+        salvarMovimentacao(produto, TipoMovimentacao.SAIDA, quantidade);
+
+        return atualizado;
+    }
+
+     private void salvarMovimentacao(Produto produto, TipoMovimentacao tipo, int quantidade) {
+        Movimentacao mov = Movimentacao.builder()
+                .produto(produto)
+                .tipo(tipo)
+                .quantidade(quantidade)
+                .data(LocalDateTime.now())
+                .build();
+
+        movimentacaoRepository.save(mov);
     }
 
 }

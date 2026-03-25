@@ -62,4 +62,6 @@ public class ProdutoController {
     public Produto saida(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
         return produtoService.saidaEstoque(id, body.get("quantidade"));
     }
+
+   
 }
