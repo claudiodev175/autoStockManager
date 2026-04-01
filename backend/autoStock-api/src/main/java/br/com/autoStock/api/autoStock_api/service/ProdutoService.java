@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.autoStock.api.autoStock_api.exceptions.EstoqueInsuficienteException;
+import br.com.autoStock.api.autoStock_api.exceptions.ProdutoNaoEncontradoException;
 import br.com.autoStock.api.autoStock_api.model.Produto;
 import br.com.autoStock.api.autoStock_api.repository.ProdutoRepository;
 import br.com.autoStock.api.autoStock_api.model.Movimentacao;
@@ -25,7 +27,8 @@ public class ProdutoService {
     }
 
     public Produto obterProdutoPorId(Long id) {
-        return produtoRepository.findById(id).orElse(null);
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto não encontrado"));
     }
 
     public void deletarProduto(Long id) {
@@ -46,6 +49,10 @@ public class ProdutoService {
     }
 
       public Produto entradaEstoque(Long id, int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero");
+        }
+
         Produto produto = obterProdutoPorId(id);
 
         produto.setQuantidade(produto.getQuantidade() + quantidade);
@@ -56,11 +63,15 @@ public class ProdutoService {
         return atualizado;
     }
 
-    public Produto saidaEstoque(Long id, int quantidade) {
+     public Produto saidaEstoque(Long id, int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero");
+        }
+
         Produto produto = obterProdutoPorId(id);
 
         if (produto.getQuantidade() < quantidade) {
-            throw new RuntimeException("Estoque insuficiente");
+            throw new EstoqueInsuficienteException("Estoque insuficiente");
         }
 
         produto.setQuantidade(produto.getQuantidade() - quantidade);
