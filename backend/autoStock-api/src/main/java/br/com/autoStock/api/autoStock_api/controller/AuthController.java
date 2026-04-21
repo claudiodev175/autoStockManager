@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.autoStock.api.autoStock_api.model.Usuario;
 import br.com.autoStock.api.autoStock_api.service.AuthService;
+import br.com.autoStock.api.autoStock_api.dto.RegisterRequestDTO;
+import br.com.autoStock.api.autoStock_api.dto.LoginRequestDTO;
+import br.com.autoStock.api.autoStock_api.dto.AuthResponseDTO;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,13 +20,13 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
-    public String register(@RequestBody Usuario usuario) {
-        return authService.register(usuario.getEmail(), usuario.getPassword(), usuario.getNome());
+     @PostMapping("/register")
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequestDTO request) {
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Usuario usuario) {
-        return authService.login(usuario.getEmail(), usuario.getPassword());
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }

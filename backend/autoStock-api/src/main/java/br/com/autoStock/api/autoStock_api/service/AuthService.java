@@ -4,6 +4,13 @@ import org.springframework.stereotype.Service;
 
 import br.com.autoStock.api.autoStock_api.model.Usuario;
 import br.com.autoStock.api.autoStock_api.repository.UsuarioRepository;
+import br.com.autoStock.api.autoStock_api.enums.Role;
+import br.com.autoStock.api.autoStock_api.dto.RegisterRequestDTO;
+import br.com.autoStock.api.autoStock_api.dto.LoginRequestDTO;
+import br.com.autoStock.api.autoStock_api.dto.AuthResponseDTO;
+import br.com.autoStock.api.autoStock_api.service.JwtService;
+
+
 
 
 @Service
@@ -21,25 +28,28 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String register(String email, String password, String nome) {
-        Usuario usuario = new Usuario();
-        usuario.setEmail(email);
-        usuario.setPassword(passwordEncoder.encode(password));
-        usuario.setNome(nome);
+    public AuthResponseDTO register(RegisterRequestDTO request) {
+        Usuario user = Usuario.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
+                .build();
 
-        usuarioRepository.save(usuario);
+        usuarioRepository.save(user);
 
-        return jwtService.generateToken(usuario);
+        String token = jwtService.generateToken(user);
+        return new AuthResponseDTO(token);
     }
 
-    public String login(String email, String password) {
-        Usuario usuario = usuarioRepository.findByEmail(email)
+    public AuthResponseDTO login(LoginRequestDTO request) {
+        Usuario user = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!passwordEncoder.matches(password, usuario.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Senha inválida");
         }
 
-        return jwtService.generateToken(usuario);
+        String token = jwtService.generateToken(user);
+        return new AuthResponseDTO(token);
     }
 }
