@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
 
 import br.com.autoStock.api.autoStock_api.model.Produto;
 import br.com.autoStock.api.autoStock_api.service.ProdutoService;
@@ -22,6 +24,12 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+     @GetMapping
+    public ResponseEntity<List<Produto>> listarTodos() {
+        List<Produto> produtos = produtoService.listarTodos();
+        return ResponseEntity.ok(produtos);
+    }
 
     @PostMapping
     public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {

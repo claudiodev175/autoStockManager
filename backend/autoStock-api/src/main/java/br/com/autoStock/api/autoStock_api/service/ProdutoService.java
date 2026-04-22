@@ -12,6 +12,7 @@ import br.com.autoStock.api.autoStock_api.repository.ProdutoRepository;
 import br.com.autoStock.api.autoStock_api.model.Movimentacao;
 import br.com.autoStock.api.autoStock_api.repository.MovimentacaoRepository;
 import br.com.autoStock.api.autoStock_api.enums.TipoMovimentacao;
+import java.util.List;
 
 @Service
 public class ProdutoService {
@@ -21,6 +22,11 @@ public class ProdutoService {
 
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
+
+    // ✅ MÉTODO PARA LISTAR TODOS OS PRODUTOS
+    public List<Produto> listarTodos() {
+        return produtoRepository.findAll();
+    }
 
     public Produto salvarProduto(Produto produto) {
         return produtoRepository.save(produto);

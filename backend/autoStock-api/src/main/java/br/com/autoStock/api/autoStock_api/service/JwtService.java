@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import java.security.Key;
 
-
 @Service
 public class JwtService {
 
@@ -47,6 +46,10 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-}
 
-// "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWRvQGVtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3Njc4MDczNCwiZXhwIjoxNzc2Nzg0MzM0fQ.ld58TOKcLtzXqw5sARTdMgBoZANXFAK2Et7SZD9hkyQ"
+    // Adicione este método ao seu JwtService existente
+    public boolean isTokenValid(String token, String userEmail) {
+        final String email = extractEmail(token);
+        return (email.equals(userEmail) && !isTokenExpired(token));
+    }
+}
