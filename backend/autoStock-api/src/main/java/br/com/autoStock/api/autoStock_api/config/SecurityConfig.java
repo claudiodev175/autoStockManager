@@ -33,6 +33,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                         .requestMatchers("/api/produtos/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> basic.disable())
