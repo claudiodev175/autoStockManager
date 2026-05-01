@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/movimentacoes")
+@RequestMapping("/movimentacoes")
 public class MovimentacaoController {
 
     private MovimentacaoRepository movimentacaoRepository;
