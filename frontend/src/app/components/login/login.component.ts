@@ -1,11 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
+ loginForm!: FormGroup;
+  loading = false;
+  submitted = false;
+
+  constructor(private formBuilder: FormBuilder, private router: Router) { }
+
+  ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [
+        Validators.required, 
+        Validators.minLength(8), 
+        Validators.maxLength(20),
+        Validators.pattern('^[a-zA-Z0-9]+$')
+      ]],
+      rememberMe: [false]
+    });
+  }
+
+  get f() { return this.loginForm.controls; }
+
+   goToHome(): void {
+    this.router.navigate(['/home']);
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this.loading = true;
+    
+    // Simula chamada API
+    setTimeout(() => {
+      console.log('Login:', this.loginForm.value);
+      this.loading = false;
+      // Aqui você redireciona ou mostra mensagem de sucesso
+    }, 2000);
+     this.goToHome();
+  }
 
 }
