@@ -33,7 +33,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                         .requestMatchers("/api/produtos/**").authenticated()
+                         .requestMatchers("/api/produtos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> basic.disable())
@@ -42,6 +42,23 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    //   @Bean
+    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    //     return http
+    //             .csrf(csrf -> csrf.disable())
+    //             .cors(cors -> {})
+    //             .sessionManagement(session -> 
+    //                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    //             .authorizeHttpRequests(auth -> auth
+    //                     .anyRequest().permitAll()  // 👈 LIBERA COMPLETAMENTE TUDO
+    //             )
+    //             .httpBasic(basic -> basic.disable())
+    //             .formLogin(form -> form.disable())
+    //             // COMENTE O FILTRO JWT TEMPORARIAMENTE
+    //             // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+    //             .build();
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

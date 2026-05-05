@@ -19,7 +19,7 @@ import br.com.autoStock.api.autoStock_api.model.Produto;
 import br.com.autoStock.api.autoStock_api.service.ProdutoService;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 
     @Autowired
